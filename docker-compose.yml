@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  order_management:
+    build:
+      context: ./order_management
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./order_management:/app
+
+  trade_matching:
+    build:
+      context: ./trade_matching
+    ports:
+      - "8001:8001"
+    depends_on:
+      - order_management
+    volumes:
+      - ./trade_matching:/app
+
+  websocket_service:
+    build:
+      context: ./websocket_service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - order_management
+    volumes:
+      - ./websocket_service:/app
+
+networks:
+  default:
+    driver: bridge
